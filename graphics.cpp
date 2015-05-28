@@ -6,15 +6,20 @@ using namespace std;
 
 Graphics::Graphics(int width , int height , int bpp , string title) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
-		throw "Failed to initialize";
+		throw "Failed to initialize SDL";
 	}
 
-	screen = SDL_SetVideoMode(width , height , bpp , SDL_SWSURFACE);
-	if (screen == NULL) {
-		throw "Failed to setup screen";
+	window = SDL_CreateWindow(title.c_str() , SDL_WINDOWPOS_UNDEFINED , SDL_WINDOWPOS_UNDEFINED , width , height , SDL_WINDOW_SHOWN);
+	if (window == NULL) {
+		throw "Failed to setup window";
 	}
 
-	SDL_WM_SetCaption(title , NULL);
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_Init(IMG_INIT_JPG))) {
+		throw "Failed to initialize SDL_Image";
+	}
+
+	screen = SDL_GetWindowSurface(window);
+
 	screenWidth = width;
 	screenHeight = height;
 	screenBPP = bpp;
@@ -22,35 +27,34 @@ Graphics::Graphics(int width , int height , int bpp , string title) {
 }
 
 Graphics::~Graphics() {
+// Free Surface conundrum (data structure needed to store SDL_Surface pointers for eventual Free_Surface calls)
+	SDL_DestroyWindow(window);
+	window = NULL;
 	SDL_Quit();
 }
 
-SDL_Surface* Graphics::load_image(string filename) {
-	SDL_Surface* loadedImage = NULL;
-	SDL_Surface* optimizedImage = NULL;
-
-	loadedImage = SDL_LoadBMP(filename.c_str());
-
-	if (loadedImage != NULL) {
-		optimizedImage = SDL_DisplayFormat(loadedImage);
-		SDL_FreeSurface(loadedImage);
+SDL_Surface* Graphics::loadSurface(string filename) {
+	SDL_Surface* final = NULL;
+	SDL_Surface* original = IMG_Load(filename.c_str());
+	if (original == NULL) {
+		throw "Failed to load image";
 	}
 
-	return optimizedImage;
+	final = SDL_ConvertSurface(original , screen->format , NULL);
+	if (final == NULL) {
+		throw "Failed to optimize image";
+	}
+
+	SDL_FreeSurface(original);
+	return final;
 }
 
-void Graphics::apply_surface(int x , int y , SDL_Surface* source , SDL_Surface* destination) {
-	SDL_rect offset;
-	offset.x = x;
-	offset.y = y;
-
-	SDL_BlitSurface(source , NULL , destination , &offset);
+void Graphics::applySurface(SDL_Surface* image , SDL_Rect* iRect , SDL_Rect* screenRect) {
+	SDL_BlitScaled(image , iRect , screen , screenRect);
 }
 
 void Graphics::update_screen() {
-	if(SDL_Flip(screen) == -1) {
-		throw "Failed to update screen";
-	}
+	SDL_UpdateWindowSurface(window);
 }
 
 void Graphics::wait(int time) {
