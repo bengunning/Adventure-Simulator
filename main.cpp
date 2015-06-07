@@ -16,7 +16,10 @@ int main(int argc , char* argv[]) {
 			}
 		}
 		
-		window.clear();
+		window.clear(1);
+
+
+
 		window.update_screen();
 	}
 

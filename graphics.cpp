@@ -24,6 +24,10 @@ Graphics::Graphics(int width , int height , int bpp , string title) {
 		throw "Failed to initialize SDL_Image";
 	}
 
+	if (TTF_Init() == -1) {
+		throw "Failed to initialize SDL_TTF";
+	}
+
 //	screen = SDL_GetWindowSurface(window);
 
 	screenWidth = width;
@@ -35,11 +39,13 @@ Graphics::Graphics(int width , int height , int bpp , string title) {
 Graphics::~Graphics() {
 // Free Surface conundrum (data structure needed to store SDL_Surface pointers for eventual Free_Surface calls)
 // Same thing for Destroy Texture
+// TTF_CloseFont
 	SDL_DestroyRenderer(renderer);
 	renderer = NULL;
 	SDL_DestroyWindow(window);
 	window = NULL;
-	
+
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -84,7 +90,12 @@ void Graphics::applyTexture(SDL_Texture* texture) {
 	SDL_RenderCopy(renderer , texture , NULL , NULL);
 }
 
-void Graphics::clear() {
+void Graphics::clear(int bg) {
+	if (bg) {
+		SDL_SetRenderDrawColor(renderer , 0x0 , 0x0 , 0x0 , 0x0);
+	} else {
+		SDL_SetRenderDrawColor(renderer , 0xFF , 0xFF , 0xFF , 0xFF);
+	}
 	SDL_RenderClear(renderer);
 }
 
@@ -98,4 +109,41 @@ void Graphics::wait(int time) {
 		throw "Invalid wait time";
 	}
 	SDL_Delay(time);
+}
+
+void Graphics::color(int red , int green , int blue , int alpha) {
+	SDL_SetRenderDrawColor(renderer , red , green , blue , alpha);
+}
+
+void Graphics::drawRect(int x , int y , int wid , int len) {
+	SDL_Rect rectangle = { x , y , wid , len };
+	SDL_RenderDrawRect(renderer , &rectangle);
+}
+
+void Graphics::fillRect(int x , int y , int wid , int len) {
+	SDL_Rect rectangle = { x , y , wid , len };
+	SDL_RenderFillRect(renderer , &rectangle);
+}
+
+void Graphics::line(int x0 , int y0 , int x1 , int y1) {
+	SDL_RenderDrawLine(renderer , x0 , y0 , x1 , y1);
+}
+
+void Graphics::point(int x , int y) {
+	SDL_RenderDrawPoint(renderer , x , y);
+}
+
+SDL_Texture* Graphics::loadText(string text , TTF_Font font , SDL_Color color) {
+	SDL_Surface* tempText = TTF_RenderText_Solid(font , text.c_str() , color);
+	if (tempText == NULL) {
+		throw "Failed to make text";
+	}
+
+	SDL_Texture* finalText SDL_CreateTextureFromSurface(renderer , tempText);
+	if (finalText == NULL) {
+		throw "Failed to make text";
+	}
+	SDL_FreeSurface(tempText);
+
+	return finalText;
 }
