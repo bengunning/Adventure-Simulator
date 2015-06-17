@@ -1,4 +1,4 @@
-// Ben Gunning
+	// Ben Gunning
 // Adventure-Simulator
 // Key.h
 #ifndef KEY
@@ -10,12 +10,12 @@ using namespace std;
 
 class Key : public Object {
 	public:
-		Key(Lock* = NULL);
+		Key(Object* = NULL , Room* = NULL , int = 320 , int = 240 , string = "" , int = 0 , int = 0 , int = 0);
 		~Key();
 		int isFinished();
 	private:
-		Lock* match_lock;
+		Object* match_lock;
 		int isCollected;
-}
+};
 
 #endif

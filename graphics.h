@@ -30,7 +30,7 @@ class Graphics {
 		void line(int , int , int , int);
 		void point(int , int);
 
-		SDL_Texture* loadText(string , TTF_Font , SDL_Color); // "text" , TTF_OpenFont(filename , size) , SDL_Color = {r,g,b}
+		SDL_Texture* loadText(string , string , int , SDL_Color);
 
 	private:
 		SDL_Window* window;

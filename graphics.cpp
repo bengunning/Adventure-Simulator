@@ -133,13 +133,19 @@ void Graphics::point(int x , int y) {
 	SDL_RenderDrawPoint(renderer , x , y);
 }
 
-SDL_Texture* Graphics::loadText(string text , TTF_Font font , SDL_Color color) {
+SDL_Texture* Graphics::loadText(string text , string font_str , int size , SDL_Color color) {
+	TTF_Font* font = NULL;
+	font = TTF_OpenFont(font_str.c_str() , size);
+	if (font == NULL) {
+		throw "Failed to open font";
+	}
+
 	SDL_Surface* tempText = TTF_RenderText_Solid(font , text.c_str() , color);
 	if (tempText == NULL) {
 		throw "Failed to make text";
 	}
 
-	SDL_Texture* finalText SDL_CreateTextureFromSurface(renderer , tempText);
+	SDL_Texture* finalText = SDL_CreateTextureFromSurface(renderer , tempText);
 	if (finalText == NULL) {
 		throw "Failed to make text";
 	}

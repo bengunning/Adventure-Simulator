@@ -9,12 +9,14 @@ using namespace std;
 
 class Object {
 	public:
-		Object();
-		~Object();
 		virtual int isFinished() = 0;
 	private:
 		Room* Found_Room;
 		int Found_X , Found_Y;
-}
+		string name;
+		int red;
+		int green;
+		int blue;
+};
 
 #endif

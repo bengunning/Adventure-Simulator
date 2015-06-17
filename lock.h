@@ -10,12 +10,12 @@ using namespace std;
 
 class Lock : public Object {
 	public:
-		Lock(Key* = NULL);
+		Lock(Object* = NULL , Room* = NULL , int = 320 , int = 240 , string = "" , int = 0 , int = 0 , int = 0);
 		~Lock();
 		int isFinished();
 	private:
-		Key* match_key;
+		Object* match_key;
 		int isOpen;
-}
+};
 
 #endif
