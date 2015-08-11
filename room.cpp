@@ -28,3 +28,22 @@ int Room::getX() {
 int Room::getY() {
 	return y;
 }
+
+void Room::addAdjacent(char direction , Room* next) {
+	switch (direction) {
+		case 'w':
+			up = next;
+			break;
+		case 'a':
+			left = next;
+			break;
+		case 's':
+			down = next;
+			break;
+		case 'd':
+			right = next;
+			break;
+		default:
+			break;
+	}
+}

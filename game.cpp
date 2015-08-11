@@ -20,15 +20,19 @@ void Game::createRoom(Room* initial , char direction , SDL_Color backdrop) {
 		switch (direction) {
 			case 'w':
 				Room next(NULL , initial , NULL , NULL , backdrop , initial.getX() , initial.getY() + 1);
+				initial.addAdjacent('w' , next);
 				break;
 			case 'a':
 				Room next(NULL , NULL , NULL , initial , backdrop , initial.getX() - 1 , initial.getY());
+				initial.addAdjacent('a' , next);
 				break;
 			case 's':
 				Room next(initial , NULL , NULL , NULL , backdrop , initial.getX() , initial.getY() - 1)
+				initial.addAdjacent('s' , next);
 				break;
 			case 'd':
 				Room next(NULL , NULL , initial , NULL , backdrop , initial.getX() + 1 , initial.getY());
+				initial.addAdjacent('d' , next);
 				break;
 			default:
 				break;

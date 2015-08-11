@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc , char* argv[]) {
-	Graphics window(640 , 480 , 32 , "Adventure-Simulator");
+	Graphics window(1024 , 768 , 32 , "Adventure-Simulator");
 	Game game();
 	SDL_Event user;
 	int quit = 0;

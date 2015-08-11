@@ -133,6 +133,22 @@ void Graphics::point(int x , int y) {
 	SDL_RenderDrawPoint(renderer , x , y);
 }
 
+void Graphics::drawCircle(int x , int y , int r) {
+	double theta = 0.0;
+	while (theta < 2 * M_PI) {
+		SDL_RenderDrawPoint(renderer, x + r * cos(theta) , y + r * sin(theta));
+		theta += .01;
+	}
+}
+
+void Graphics::fillCircle(int x , int y , int r) {
+	double theta = 0.0;
+	while (theta < M_PI) {
+		SDL_RenderDrawLine(renderer , x + r * cos(theta) , y + r * sin(theta) , x - r * cos(theta) , y - r * sin(theta));
+		theta += .001;
+	}
+}
+
 SDL_Texture* Graphics::loadText(string text , string font_str , int size , SDL_Color color) {
 	TTF_Font* font = NULL;
 	font = TTF_OpenFont(font_str.c_str() , size);

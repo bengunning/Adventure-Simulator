@@ -16,6 +16,7 @@ class Room {
 		SDL_Color getColor();
 		int getX();
 		int getY();
+		void addAdjacent(char , Room*);
 	private:
 		SDL_Color background;
 		Room* up;

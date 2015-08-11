@@ -4,6 +4,7 @@
 #ifndef GRAPHICS
 #define GRAPHICS
 #include<iostream>
+#include<cmath>
 #include<string>
 #include<SDL.h>
 #include<SDL_image.h>
@@ -29,6 +30,8 @@ class Graphics {
 		void fillRect(int , int , int , int);
 		void line(int , int , int , int);
 		void point(int , int);
+		void drawCircle(int , int , int);
+		void fillCircle(int , int , int);
 
 		SDL_Texture* loadText(string , string , int , SDL_Color);
 
